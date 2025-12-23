@@ -32,6 +32,11 @@
 
 <body><div id="in-page-channel-node-id" data-channel-name="in_page_channel_kjggQb"></div>
     
+    <!-- Custom Cursor Element with Black Glow -->
+    <div id="custom-cursor" style="position: fixed; top: 0; left: 0; pointer-events: none; z-index: 10000; display: none; will-change: transform;">
+        <img src="cursor.png" style="filter: drop-shadow(0 0 5px #fffb00) drop-shadow(0 0 10px #000000); width: auto; max-height: 48px;" alt="Custom Cursor">
+    </div>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>$SPEEDYCAT - The OG 4chan Meme Coin | Flying Since 2005</title>
     <meta name="description" content="$SPEEDYCAT - Born from a legendary 4chan typo in 2005, the fastest meme coin in the cosmos. Join the Speedycat community and zoom to the moon!">
@@ -244,18 +249,12 @@
   }
 </style>
 <style>
-    /* Custom cursor setup */
-    html, body {
-        /* RECTANGLE UPDATE: Rectangular images work fine! 
-           CRITICAL: The image MUST be smaller than 128x128 pixels (width AND height).
-           If it is larger, the browser will ignore it.
-        */
-        cursor: url('cursor.png'), auto !important; 
-    }
-    
-    /* Ensure it persists on hoverable elements unless they override it */
-    a, button, .cursor-pointer {
-        cursor: url('cursor.png'), pointer !important;
+    /* Custom Cursor Logic */
+    @media (pointer: fine) {
+        /* Hide default cursor on mouse devices so we can render the custom one */
+        html, body, a, button, input, select, textarea, .cursor-pointer {
+            cursor: none !important;
+        }
     }
 </style>
   
@@ -484,6 +483,26 @@
 
     // Initial call to set up the default view
     updatePreview();
+
+    // --- CUSTOM CURSOR LOGIC ---
+    const customCursor = document.getElementById('custom-cursor');
+    
+    // Only activate on devices with a mouse (fine pointer)
+    if (window.matchMedia("(pointer: fine)").matches) {
+        document.addEventListener('mousemove', (e) => {
+            customCursor.style.display = 'block';
+            // Use transform for smooth movement
+            customCursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+        });
+
+        // Hide when leaving window
+        document.addEventListener('mouseout', () => {
+            customCursor.style.display = 'none';
+        });
+        document.addEventListener('mouseover', () => {
+            customCursor.style.display = 'block';
+        });
+    }
 </script>
 
 
